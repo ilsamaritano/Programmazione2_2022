@@ -1,6 +1,6 @@
 # Script di test Assegnamento 2 622AA 2022/23 (non modificare)
 from testMy import *
-from babs_implementazione import *
+from babs import *
 
 def test_finale():
     #contiamo i test falliti

@@ -1,5 +1,19 @@
 class Libro:
     def __init__(self,cognome,nome,titolo,anno,collocazione,iban,note=""):
+        if type(cognome) != str or type(nome) != str or type(titolo) != str or type(iban) != str or type(note) != str:
+            raise TypeError("Parametri errati")
+        if type(anno) != int:
+            raise TypeError("Parametri errati")
+        if type(collocazione) != tuple or type(collocazione[0]) != str or type (collocazione[1]) != int:
+            raise TypeError("Parametri errati")
+        
+        self.cognome = cognome
+        self.nome = nome
+        self.titolo = titolo
+        self.anno = anno
+        self.coll = collocazione
+        self.iban = iban
+        self.note = note
         """ Crea un nuovo oggetto Libro
         :param cognome: cognome dell'autore
         :param nome: nome dell'autore
@@ -9,19 +23,22 @@ class Libro:
         :param iban: IBAN (stringa) unico per ogni libro
         :param note: stringa eventualmente vuota
         """
-         pass #instruzione che non fa niente --> da sostituire con il codice
+        #pass #instruzione che non fa niente --> da sostituire con il codice
 
 
     def __str__ (self):
+        libro = [self.cognome, self.nome, self.titolo, self.anno, self.coll, self.iban, self.note]
+        
+        return str(libro)
         """ Serializza un libro rappresentandolo come una stringa. La stringa
         puo' usare un formato a scelta dello studente
         :return: una stringa che rappresenta il libro
         """
         pass #istruzione che non fa niente --> da sostituire con il codice
 
-
-
     def __eq__(self,a):
+        
+
         """ stabilisce se self e a sono uguali -- due libri sono cosiderati uguali
             se hanno esattamente gli stessi campi (eccetto le note e la collocazione)  """
 
