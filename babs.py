@@ -42,7 +42,7 @@ class Libro:
             if self.cognome != a.cognome or self.nome!=a.nome or self.titolo!=a.titolo or self.anno!=a.anno or self.iban!=a.iban:
                 uguali = False
         except AttributeError:
-            print("Il termine non è un oggetto Libro")
+            print("Un termine non è un oggetto Libro")            
         else:
             return uguali
         """ stabilisce se self e a sono uguali -- due libri sono cosiderati uguali
@@ -53,17 +53,26 @@ class Libro:
 
 class Catalogo:
     def __init__(self):
+        self.dizionario = {}
+        
         """Crea un catalogo vuoto rappresentato come un dizionario di
            libri con chiave iban"""
         pass #instruzione che non fa niente --> da sostituire con il codice
 
 
     def n_books(self):
+        return len(self.dizionario)
         """Ritorna il numero di libri nel catalogo """
         pass #instruzione che non fa niente --> da sostituire con il codice
 
 
     def inserisci(self,li):
+        if li.iban in self.dizionario:
+            return False
+        else:
+            self.dizionario[li.iban] = li
+            return True
+
         """Inserisce un nuovo libro nel catalogo:
             se l'iban è già presente non modifica il catalogo
             :param: li oggetto libro da inserire
@@ -73,19 +82,41 @@ class Catalogo:
 
 
     def __str__(self):
+        cata = ""
+        for lib in self.dizionario:
+            cata = cata + str(self.dizionario[lib]) + "\n"
+        self.cata = cata
+        return cata
         """Serializza il catalogo in una stringa che contiene tutti i libri
         in ordine di IBAN crescente.
         Ogni libro è separato dal successivo da "\n" """
         pass #instruzione che non fa niente --> da sostituire con il codice
 
 
-    def store(self,nomefile):
+    def store(self, nomefile):
+        with open(nomefile, "w") as f:
+            f.write(self.cata)
         """Scrive il catalogo sul file "nomefile" -- > formato a scelta dello studente
          da specificare nei commenti"""
         pass #instruzione che non fa niente --> da sostituire con il codice
 
 
     def load(self,nomefile):
+        try:
+            f = open(nomefile, "r")    
+        except FileNotFoundError:
+            print("Il file non esiste!")
+        except OSError as e:
+            print(e)
+        else:
+            self.dizionario = {}
+            for aline in f:
+                char_del = [",", ".", "[", "]", "\'", "\""]
+                for carattere in aline:
+                    if carattere in char_del:
+                        aline.replace(carattere, "")  
+                print(aline)
+            f.close()
         """Legge il catalogo dal file "nomefile" nel formato a scelta dello studente
         e lo carica nel catalogo eliminando tutto il contenuto precedente
         del catalogo """

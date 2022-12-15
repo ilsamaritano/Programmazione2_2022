@@ -26,3 +26,8 @@ if c2 != c:
     print("sono diversi")
 else:
     print("I libri",c,"\ne ",c1, "\nsono uguali")
+
+# test inserisci
+cat = Catalogo()
+cat.inserisci(Libro("Dexter", "Colin", "Il mondo silenzioso di Nicholas Quinn", 2012, ("G", 15),"334455"))
+print(cat)
