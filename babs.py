@@ -37,8 +37,14 @@ class Libro:
         pass #istruzione che non fa niente --> da sostituire con il codice
 
     def __eq__(self,a):
-        
-
+        uguali = True
+        try:
+            if self.cognome != a.cognome or self.nome!=a.nome or self.titolo!=a.titolo or self.anno!=a.anno or self.iban!=a.iban:
+                uguali = False
+        except AttributeError:
+            print("Il termine non è un oggetto Libro")
+        else:
+            return uguali
         """ stabilisce se self e a sono uguali -- due libri sono cosiderati uguali
             se hanno esattamente gli stessi campi (eccetto le note e la collocazione)  """
 
