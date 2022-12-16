@@ -109,13 +109,21 @@ class Catalogo:
         else:
             self.dizionario = {}
             for aline in f:
-                self.dizionario.inserisci(Libro(aline))
-                char_del = [",", ".", "[", "]", "\'", "\""]
+                # self.dizionario.inserisci(Libro(aline))
+                '''if li.iban in self.dizionario:
+                else:
+                    self.dizionario[li.iban] = li'''
+                aline = aline.split(',')
+                '''char_del = [",", ".", "[", "]", "\'", "\""]
                 for carattere in aline:
                     if carattere in char_del:
-                        aline.replace(carattere, "")
-                print(aline)
-                print(self.dizionario)
+                        aline = aline.replace(carattere, "")
+                #aline = aline.split(', ')'''
+                print("aline", aline)
+                self.dizionario[aline[6]
+                                ] = aline[0], aline[1], aline[2], aline[3], aline[4], aline[5], aline[6], aline[7]
+
+                print("diz", self.dizionario)
             f.close()
         """Legge il catalogo dal file "nomefile" nel formato a scelta dello studente
         e lo carica nel catalogo eliminando tutto il contenuto precedente
@@ -135,6 +143,7 @@ class Catalogo:
         pass  # istruzione che non fa niente --> da sostituire con il codice
 
 
+'''
 class finestra:
     def __init__(self, root):
         """__init__ definisce l'aspetto (task1) e crea lo stato accessibile da tutti
@@ -142,24 +151,24 @@ class finestra:
         # creazione finestra e geometria
         self.root = root
         self.root.title("Biblioteca")
-        self.root.geometry("1000x1000")
+        self.root.geometry("600x800")
 
         self.label = tk.Label(text="I libri presenti nel catalogo sono:")
         self.label.pack()
 
         # creazione dei bottoni
-        self.btn_animale = tk.Button(
-            bg="yellow", text="Animale", width=25, height=3)
-        self.btn_minerale = tk.Button(
-            bg="pink", text="Minerale", width=25, height=3)
-        self.btn_vegetale = tk.Button(
-            bg="light green", text="Vegetale", width=25, height=3)
-        self.btn_exit = tk.Button(bg="red", text="EXIT", width=25, height=2)
+        self.btn_inserisci = tk.Button(
+            bg="white", text="Inserisci nuovo libro", width=30, height=3)
+        self.btn_carica = tk.Button(
+            bg="white", text="Carica un nuovo catalogo da file", width=30, height=3)
+        self.btn_esporta = tk.Button(
+            bg="white", text="Esporta il catalogo in un file", width=30, height=3)
+        self.btn_exit = tk.Button(bg="red", text="Esci", width=30, height=2)
 
         # inseriamo i bottoni nella finestra
-        self.btn_animale.pack()
-        self.btn_vegetale.pack()
-        self.btn_minerale.pack()
+        self.btn_inserisci.pack()
+        self.btn_esporta.pack()
+        self.btn_carica.pack()
         self.btn_exit.pack()
 
         # label che conterrà le risposte
@@ -171,31 +180,31 @@ class finestra:
         # con i gestori di eventi.
         # tutti i bottoni sono associati al tasto di sinistra del mouse
         # ---------------------------------------------------------
-        self.btn_animale.bind("<Button-1>", self.handler_animale)
-        self.btn_minerale.bind("<Button-1>", self.handler_minerale)
-        self.btn_vegetale.bind("<Button-1>", self.handler_vegetale)
+        self.btn_inserisci.bind("<Button-1>", self.handler_inserisci)
+        self.btn_carica.bind("<Button-1>", self.handler_carica)
+        self.btn_esporta.bind("<Button-1>", self.handler_esporta)
         self.btn_exit.bind("<Button-1>", self.handler_exit)
 
     # task 2: definizione dei gestori degli eventi
 
-    def handler_animale(self, evento):
+    def handler_inserisci(self, evento):
         # restituisce la risposta
         self.res.destroy()
         self.res = tk.Label(
-            text="Non è un animale: ritenta", height=5, width=20)
+            text=" ", height=5, width=20)
         self.res.pack()
 
-    def handler_vegetale(self, evento):
+    def handler_esporta(self, evento):
         # restituisce la risposta
         self.res.destroy()
-        self.res = tk.Label(text="Bravo!!! Hai indovinato", height=5, width=20)
+        self.res = tk.Label(text=" ", height=5, width=20)
         self.res.pack()
 
-    def handler_minerale(self, evento):
+    def handler_carica(self, evento):
         # restituisce la risposta
         self.res.destroy()
         self.res = tk.Label(
-            text="Non è un minerale: ritenta", height=5, width=20)
+            text=" ", height=5, width=20)
         self.res.pack()
 
     def handler_exit(self, evento):
@@ -208,3 +217,4 @@ root = tk.Tk()
 finestra(root)
 # task 4: avvio del ciclo ascolto eventi
 root.mainloop()
+'''
