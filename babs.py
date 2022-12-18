@@ -217,11 +217,15 @@ class finestra:
         label2 = tk.Label(
             text='"Dexter","Colin","Le figlie di Caino",2017,("G",22),"453678", "Copia danneggiata."')
         entry = tk.Entry(bg="white", width=60)
-        print(entry)
+        self.btn_inserisci2 = tk.Button(
+            bg="white", text="Inserisci nuovo libro", width=30, height=3)
+        self.btn_inserisci2.pack()
+        #self.btn_inserisci2.bind("<Button-1>", Catalogo.inserisci(entry))
         # inseriamo il widget nella finestra pack() fa il resize includendo i widget in ordine
         label1.pack()
         label2.pack()
         entry.pack()
+        print(entry.get())
 
         self.res.destroy()
         self.res = tk.Label(
