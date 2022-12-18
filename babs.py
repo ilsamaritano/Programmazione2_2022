@@ -1,15 +1,19 @@
 import tkinter as tk
+from tkinter import filedialog as fd
+from tkinter.filedialog import asksaveasfile
 
 
 class Libro:
     def __init__(self, cognome, nome, titolo, anno, collocazione, iban, note=""):
         for el in [cognome, nome, titolo, iban, note]:
             if type(el) != str:
-                raise TypeError("Il parametro " + str(el) + " deve essere una stringa")
+                raise TypeError("Il parametro " + str(el) +
+                                " deve essere una stringa")
         if type(anno) != int:
             raise TypeError("Il parametro 'anno' deve essere un intero")
         if type(collocazione) != tuple or type(collocazione[0]) != str or type(collocazione[1]) != int:
-            raise TypeError("Il parametro 'collocazione' deve essere una tupla con una stringa e un intero")
+            raise TypeError(
+                "Il parametro 'collocazione' deve essere una tupla con una stringa e un intero")
 
         self.cognome = cognome
         self.nome = nome
@@ -30,13 +34,17 @@ class Libro:
         # pass #instruzione che non fa niente --> da sostituire con il codice
 
     def __str__(self):
-        #libro = [self.cognome, self.nome, self.titolo,
-               #   self.anno, self.coll, self.iban, self.note]
-        if self.note=="":
-            libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + ", " + str(self.anno) + ", " + str(self.coll) + ", " + str(self.iban)
+        # libro = [self.cognome, self.nome, self.titolo,
+        #   self.anno, self.coll, self.iban, self.note]
+        if self.note == "":
+            libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + \
+                ", " + str(self.anno) + ", " + \
+                str(self.coll) + ", " + str(self.iban)
         else:
-           libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + ", " + str(self.anno) + ", " + str(self.coll) + ", " + str(self.iban) + ", " + str(self.note)
-               
+            libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + ", " + \
+                str(self.anno) + ", " + str(self.coll) + ", " + \
+                str(self.iban) + ", " + str(self.note)
+
         return libro
         """ Serializza un libro rappresentandolo come una stringa. La stringa
         puo' usare un formato a scelta dello studente
@@ -126,12 +134,14 @@ class Catalogo:
                     if char in del_char:
                         aline[5] = aline[5].replace(char, "")
                 new_coll_2 = int(aline[5])
-                new_collocazione =  (new_coll_1, new_coll_2)
-                if len(aline)>7:  #se ha le note                  
-                    new_libro = Libro(str(aline[0]), str(aline[1]), str(aline[2]), int(aline[3]), new_collocazione, aline[6], aline[7])
+                new_collocazione = (new_coll_1, new_coll_2)
+                if len(aline) > 7:  # se ha le note
+                    new_libro = Libro(str(aline[0]), str(aline[1]), str(
+                        aline[2]), int(aline[3]), new_collocazione, aline[6], aline[7])
                     self.inserisci(new_libro)
                 else:
-                    new_libro = Libro(str(aline[0]), str(aline[1]), str(aline[2]), int(aline[3]), new_collocazione, aline[6])
+                    new_libro = Libro(str(aline[0]), str(aline[1]), str(
+                        aline[2]), int(aline[3]), new_collocazione, aline[6])
                     self.inserisci(new_libro)
             f.close()
         """Legge il catalogo dal file "nomefile" nel formato a scelta dello studente
@@ -152,7 +162,6 @@ class Catalogo:
         pass  # istruzione che non fa niente --> da sostituire con il codice
 
 
-
 class finestra:
     def __init__(self, root):
         """__init__ definisce l'aspetto (task1) e crea lo stato accessibile da tutti
@@ -163,6 +172,9 @@ class finestra:
         self.root.geometry("600x800")
 
         self.label = tk.Label(text="I libri presenti nel catalogo sono:")
+        self.label.pack()
+
+        self.label = tk.Label(text=Catalogo.dizionario)
         self.label.pack()
 
         # creazione dei bottoni
@@ -197,20 +209,40 @@ class finestra:
     # task 2: definizione dei gestori degli eventi
 
     def handler_inserisci(self, evento):
-        # restituisce la risposta
+        # inserisce il libro nel catalogo
+
+        label1 = tk.Label(text="Inserisci un libro nel seguente formato:")
+        label2 = tk.Label(
+            text='"Dexter","Colin","Le figlie di Caino",2017,("G",22),"453678", "Copia danneggiata. "')
+        entry = tk.Entry(bg="white", width=50)
+        # inseriamo il widget nella finestra pack() fa il resize includendo i widget in ordine
+        label1.pack()
+        label2.pack()
+        entry.pack()
+
         self.res.destroy()
         self.res = tk.Label(
             text=" ", height=5, width=20)
         self.res.pack()
 
     def handler_esporta(self, evento):
-        # restituisce la risposta
+        # esporta il catalogo in formato txt
+        files = [('Documento di testo', '*.txt')]
+        file = asksaveasfile(title='Scegli dove esportare il catalogo',
+                             filetypes=files, defaultextension=files)
+        Catalogo.store(file)
         self.res.destroy()
         self.res = tk.Label(text=" ", height=5, width=20)
         self.res.pack()
 
     def handler_carica(self, evento):
-        # restituisce la risposta
+        # carica un catalogo da file txt
+        files = [('Documento di testo', '*.txt')]
+        file = fd.askopenfilename(
+            title='Carica un catalogo',
+            filetypes=files)
+        print("file", file)
+        Catalogo.load(file)
         self.res.destroy()
         self.res = tk.Label(
             text=" ", height=5, width=20)
@@ -226,4 +258,3 @@ root = tk.Tk()
 finestra(root)
 # task 4: avvio del ciclo ascolto eventi
 root.mainloop()
-
