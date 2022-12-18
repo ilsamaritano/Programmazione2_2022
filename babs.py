@@ -96,6 +96,8 @@ class Catalogo:
 
     def __str__(self):
         cata = ""
+        # ordino per iban crescente
+        self.dizionario = dict(sorted(self.dizionario.items()))
         for lib in self.dizionario:
             cata = cata + str(self.dizionario[lib]) + "\n"
         self.cata = cata
@@ -174,8 +176,8 @@ class finestra:
         self.label = tk.Label(text="I libri presenti nel catalogo sono:")
         self.label.pack()
 
-        self.label = tk.Label(text=Catalogo.dizionario)
-        self.label.pack()
+        #self.label = tk.Label(text=Catalogo.dizionario)
+        # self.label.pack()
 
         # creazione dei bottoni
         self.btn_inserisci = tk.Button(
@@ -213,8 +215,9 @@ class finestra:
 
         label1 = tk.Label(text="Inserisci un libro nel seguente formato:")
         label2 = tk.Label(
-            text='"Dexter","Colin","Le figlie di Caino",2017,("G",22),"453678", "Copia danneggiata. "')
-        entry = tk.Entry(bg="white", width=50)
+            text='"Dexter","Colin","Le figlie di Caino",2017,("G",22),"453678", "Copia danneggiata."')
+        entry = tk.Entry(bg="white", width=60)
+        print(entry)
         # inseriamo il widget nella finestra pack() fa il resize includendo i widget in ordine
         label1.pack()
         label2.pack()
