@@ -3,12 +3,13 @@ import tkinter as tk
 
 class Libro:
     def __init__(self, cognome, nome, titolo, anno, collocazione, iban, note=""):
-        if type(cognome) != str or type(nome) != str or type(titolo) != str or type(iban) != str or type(note) != str:
-            raise TypeError("Parametri errati")
+        for el in [cognome, nome, titolo, iban, note]:
+            if type(el) != str:
+                raise TypeError("Il parametro " + str(el) + " deve essere una stringa")
         if type(anno) != int:
-            raise TypeError("Parametri errati")
+            raise TypeError("Il parametro 'anno' deve essere un intero")
         if type(collocazione) != tuple or type(collocazione[0]) != str or type(collocazione[1]) != int:
-            raise TypeError("Parametri errati")
+            raise TypeError("Il parametro 'collocazione' deve essere una tupla con una stringa e un intero")
 
         self.cognome = cognome
         self.nome = nome
@@ -29,10 +30,14 @@ class Libro:
         # pass #instruzione che non fa niente --> da sostituire con il codice
 
     def __str__(self):
-        libro = [self.cognome, self.nome, self.titolo,
-                 self.anno, self.coll, self.iban, self.note]
-
-        return str(libro)
+        #libro = [self.cognome, self.nome, self.titolo,
+               #   self.anno, self.coll, self.iban, self.note]
+        if self.note=="":
+            libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + ", " + str(self.anno) + ", " + str(self.coll) + ", " + str(self.iban)
+        else:
+           libro = str(self.cognome) + ", " + str(self.nome) + ", " + str(self.titolo) + ", " + str(self.anno) + ", " + str(self.coll) + ", " + str(self.iban) + ", " + str(self.note)
+               
+        return libro
         """ Serializza un libro rappresentandolo come una stringa. La stringa
         puo' usare un formato a scelta dello studente
         :return: una stringa che rappresenta il libro
@@ -105,25 +110,29 @@ class Catalogo:
         except FileNotFoundError:
             print("Il file non esiste!")
         except OSError as e:
-            print(e)
+            print("Errore:" + e)
         else:
             self.dizionario = {}
             for aline in f:
-                # self.dizionario.inserisci(Libro(aline))
-                '''if li.iban in self.dizionario:
-                else:
-                    self.dizionario[li.iban] = li'''
-                aline = aline.split(',')
-                '''char_del = [",", ".", "[", "]", "\'", "\""]
-                for carattere in aline:
-                    if carattere in char_del:
-                        aline = aline.replace(carattere, "")
-                #aline = aline.split(', ')'''
-                print("aline", aline)
-                self.dizionario[aline[6]
-                                ] = aline[0], aline[1], aline[2], aline[3], aline[4], aline[5], aline[6], aline[7]
 
-                print("diz", self.dizionario)
+                aline = aline.replace("\n", "")
+                aline = aline.split(', ')
+                del_char = "()',"
+                for char in aline[4]:
+                    if char in del_char:
+                        aline[4] = aline[4].replace(char, "")
+                new_coll_1 = aline[4]
+                for char in aline[5]:
+                    if char in del_char:
+                        aline[5] = aline[5].replace(char, "")
+                new_coll_2 = int(aline[5])
+                new_collocazione =  (new_coll_1, new_coll_2)
+                if len(aline)>7:  #se ha le note                  
+                    new_libro = Libro(str(aline[0]), str(aline[1]), str(aline[2]), int(aline[3]), new_collocazione, aline[6], aline[7])
+                    self.inserisci(new_libro)
+                else:
+                    new_libro = Libro(str(aline[0]), str(aline[1]), str(aline[2]), int(aline[3]), new_collocazione, aline[6])
+                    self.inserisci(new_libro)
             f.close()
         """Legge il catalogo dal file "nomefile" nel formato a scelta dello studente
         e lo carica nel catalogo eliminando tutto il contenuto precedente
@@ -143,7 +152,7 @@ class Catalogo:
         pass  # istruzione che non fa niente --> da sostituire con il codice
 
 
-'''
+
 class finestra:
     def __init__(self, root):
         """__init__ definisce l'aspetto (task1) e crea lo stato accessibile da tutti
@@ -217,4 +226,4 @@ root = tk.Tk()
 finestra(root)
 # task 4: avvio del ciclo ascolto eventi
 root.mainloop()
-'''
+
