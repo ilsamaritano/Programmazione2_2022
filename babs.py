@@ -237,7 +237,8 @@ class finestra:
         files = [('Documento di testo', '*.txt')]
         file = asksaveasfile(title='Scegli dove esportare il catalogo',
                              filetypes=files, defaultextension=files)
-        Catalogo.store(file)
+        print("file", file.name)
+        Catalogo.store(Catalogo, file.name)
         self.res.destroy()
         self.res = tk.Label(text=" ", height=5, width=20)
         self.res.pack()
@@ -249,7 +250,7 @@ class finestra:
             title='Carica un catalogo',
             filetypes=files)
         print("file", file)
-        Catalogo.load(file)
+        Catalogo.load(Catalogo, file)
         self.res.destroy()
         self.res = tk.Label(
             text=" ", height=5, width=20)
