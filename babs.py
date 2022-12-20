@@ -179,15 +179,13 @@ class Finestra:
 
         cat = Catalogo()
         self.cat = cat
-        numlibri = self.cat.n_books()
-        self.label = tk.Label(
-            text="I libri presenti nel catalogo sono: " + str(numlibri))
-        self.label.pack()
 
         #self.label = tk.Label(text=Catalogo.dizionario)
         # self.label.pack()
 
         # creazione dei bottoni
+        self.btn_visualizzacatalogo = tk.Button(
+            bg="white", text="Visualizza elementi nel catalogo", width=30, height=3)
         self.btn_inserisci = tk.Button(
             bg="white", text="Inserisci nuovo libro", width=30, height=3)
         self.btn_carica = tk.Button(
@@ -197,6 +195,7 @@ class Finestra:
         self.btn_exit = tk.Button(bg="red", text="Esci", width=30, height=2)
 
         # inseriamo i bottoni nella finestra
+        self.btn_visualizzacatalogo.pack()
         self.btn_inserisci.pack()
         self.btn_esporta.pack()
         self.btn_carica.pack()
@@ -211,12 +210,19 @@ class Finestra:
         # con i gestori di eventi.
         # tutti i bottoni sono associati al tasto di sinistra del mouse
         # ---------------------------------------------------------
+        self.btn_visualizzacatalogo.bind("<Button-1>", self.handler_visualizza)
         self.btn_inserisci.bind("<Button-1>", self.handler_inserisci)
         self.btn_carica.bind("<Button-1>", self.handler_carica)
         self.btn_esporta.bind("<Button-1>", self.handler_esporta)
         self.btn_exit.bind("<Button-1>", self.handler_exit)
 
     # task 2: definizione dei gestori degli eventi
+
+    def handler_visualizza(self, evento):
+        numlibri = self.cat.n_books()
+        self.label = tk.Label(
+            text="I libri presenti nel catalogo sono: " + str(numlibri))
+        self.label.pack()
 
     def insert(self, evento):
         nuovolibro = evento.widget.get()
