@@ -108,8 +108,13 @@ class Catalogo:
         # pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def store(self, nomefile):
+        cata = ""
+        # ordino per iban crescente
+        self.dizionario = dict(sorted(self.dizionario.items()))
+        for lib in self.dizionario:
+            cata = cata + str(self.dizionario[lib]) + "\n"
         with open(nomefile, "w") as f:
-            f.write(self.cata)
+            f.write(cata)
         """Scrive il catalogo sul file "nomefile" -- > formato a scelta dello studente
          da specificare nei commenti"""
         # pass  # instruzione che non fa niente --> da sostituire con il codice
@@ -260,7 +265,8 @@ class Finestra:
         file = asksaveasfile(title='Scegli dove esportare il catalogo',
                              filetypes=files, defaultextension=files)
         print("file", file.name)
-        Catalogo.store(self.cat, file.name)
+        self.cat.store(file.name)
+        print(self.cat)
         self.res.destroy()
         self.res = tk.Label(text=" ", height=5, width=20)
         self.res.pack()
@@ -272,7 +278,7 @@ class Finestra:
             title='Carica un catalogo',
             filetypes=files)
         #print("file", file)
-        Catalogo.load(self.cat, file)
+        self.cat.load(file)
         self.res.destroy()
         self.res = tk.Label(
             text=" ", height=5, width=20)
