@@ -50,7 +50,7 @@ class Libro:
         puo' usare un formato a scelta dello studente
         :return: una stringa che rappresenta il libro
         """
-        pass  # istruzione che non fa niente --> da sostituire con il codice
+        #pass  # istruzione che non fa niente --> da sostituire con il codice
 
     def __eq__(self, a):
         uguali = True
@@ -64,7 +64,7 @@ class Libro:
         """ stabilisce se self e a sono uguali -- due libri sono cosiderati uguali
             se hanno esattamente gli stessi campi (eccetto le note e la collocazione)  """
 
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
 
 class Catalogo:
@@ -73,12 +73,12 @@ class Catalogo:
 
         """Crea un catalogo vuoto rappresentato come un dizionario di
            libri con chiave iban"""
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def n_books(self):
         return len(self.dizionario)
         """Ritorna il numero di libri nel catalogo """
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def inserisci(self, li):
         if li.iban in self.dizionario:
@@ -92,7 +92,7 @@ class Catalogo:
             :param: li oggetto libro da inserire
             :returns: True se il libro è stato inserito
             :returns: False altrimenti """
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def __str__(self):
         cata = ""
@@ -105,14 +105,14 @@ class Catalogo:
         """Serializza il catalogo in una stringa che contiene tutti i libri
         in ordine di IBAN crescente.
         Ogni libro è separato dal successivo da "\n" """
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def store(self, nomefile):
         with open(nomefile, "w") as f:
             f.write(self.cata)
         """Scrive il catalogo sul file "nomefile" -- > formato a scelta dello studente
          da specificare nei commenti"""
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def load(self, nomefile):
         try:
@@ -139,17 +139,16 @@ class Catalogo:
                 new_collocazione = (new_coll_1, new_coll_2)
                 if len(aline) > 7:  # se ha le note
                     new_libro = Libro(str(aline[0]), str(aline[1]), str(
-                        aline[2]), int(aline[3]), new_collocazione, aline[6], aline[7])
-                    self.inserisci(new_libro)
+                        aline[2]), int(aline[3]), new_collocazione, aline[6], aline[7])                    
                 else:
                     new_libro = Libro(str(aline[0]), str(aline[1]), str(
                         aline[2]), int(aline[3]), new_collocazione, aline[6])
-                    self.inserisci(new_libro)
+                self.inserisci(new_libro)
             f.close()
         """Legge il catalogo dal file "nomefile" nel formato a scelta dello studente
         e lo carica nel catalogo eliminando tutto il contenuto precedente
         del catalogo """
-        pass  # instruzione che non fa niente --> da sostituire con il codice
+        #pass  # instruzione che non fa niente --> da sostituire con il codice
 
     def __eq__(self, cat2):
         if self.dizionario == cat2.dizionario:
@@ -161,19 +160,22 @@ class Catalogo:
         :param cat2: secondo catalogo da confrontare
         :return: True se sono uguali, False altrimenti
         """
-        pass  # istruzione che non fa niente --> da sostituire con il codice
+        #pass  # istruzione che non fa niente --> da sostituire con il codice
 
 
-class finestra:
+class Finestra:
     def __init__(self, root):
         """__init__ definisce l'aspetto (task1) e crea lo stato accessibile da tutti
         i metodi (finestra, widget etc...) """
         # creazione finestra e geometria
         self.root = root
         self.root.title("Biblioteca")
-        self.root.geometry("600x800")
+        self.root.geometry("600x600")
 
-        self.label = tk.Label(text="I libri presenti nel catalogo sono:")
+        cat = Catalogo()
+        self.cat = cat
+        numlibri = self.cat.n_books()
+        self.label = tk.Label(text="I libri presenti nel catalogo sono: " + str(numlibri))
         self.label.pack()
 
         #self.label = tk.Label(text=Catalogo.dizionario)
@@ -210,22 +212,42 @@ class finestra:
 
     # task 2: definizione dei gestori degli eventi
 
+    def insert(self, evento):
+        nuovolibro = evento.widget.get()
+        nuovolibro = nuovolibro.replace("\"", "")
+        nuovolibro = nuovolibro.replace("\'", "")
+        nuovolibro = nuovolibro.split(",")
+        #if len(nuovolibro)<6 o >8 scrivere "Inserire il numero corretto di elementi"
+        new_coll1 = nuovolibro[4].replace("(", "").strip()
+        new_coll2 = nuovolibro[5].replace(")", "").strip()
+        newcollocazione = (new_coll1, int(new_coll2))
+        if len(nuovolibro)>7:
+            new_book = Libro(nuovolibro[0].strip(), nuovolibro[1].strip(), nuovolibro[2].strip(), int(nuovolibro[3]), newcollocazione, nuovolibro[6].strip(), nuovolibro[7].strip())
+        else:
+            new_book = Libro(nuovolibro[0].strip(), nuovolibro[1].strip(), nuovolibro[2].strip(), int(nuovolibro[3]), newcollocazione, nuovolibro[6].strip())
+        
+        self.cat.inserisci(new_book)
+          
+        evento.widget.delete(0,tk.END)  
+        
+
     def handler_inserisci(self, evento):
         # inserisce il libro nel catalogo
 
-        label1 = tk.Label(text="Inserisci un libro nel seguente formato:")
+        label1 = tk.Label(text="\n Inserisci un libro nel seguente formato:")
         label2 = tk.Label(
-            text='"Dexter","Colin","Le figlie di Caino",2017,("G",22),"453678", "Copia danneggiata."')
-        entry = tk.Entry(bg="white", width=60)
-        self.btn_inserisci2 = tk.Button(
-            bg="white", text="Inserisci nuovo libro", width=30, height=3)
-        self.btn_inserisci2.pack()
-        #self.btn_inserisci2.bind("<Button-1>", Catalogo.inserisci(entry))
+            text='"Cognome", "Nome", "Titolo", anno, collocazione es:("G",22),"iban", "note (facoltativo)"')
+        label3 = tk.Label(text="poi clicca Invio \n")
+        entry = tk.Entry(self.root, bg="white", width=60)
+        
         # inseriamo il widget nella finestra pack() fa il resize includendo i widget in ordine
         label1.pack()
         label2.pack()
+        label3.pack()
         entry.pack()
-        print(entry.get())
+        entry.bind("<Return>", self.insert)
+
+        
 
         self.res.destroy()
         self.res = tk.Label(
@@ -263,6 +285,6 @@ class finestra:
 
 # attivazione dell'interfaccia
 root = tk.Tk()
-finestra(root)
+Finestra(root)
 # task 4: avvio del ciclo ascolto eventi
 root.mainloop()
