@@ -221,8 +221,12 @@ class Finestra:
     def handler_visualizza(self, evento):
         numlibri = self.cat.n_books()
         self.label = tk.Label(
-            text="I libri presenti nel catalogo sono: " + str(numlibri))
+            text="Numero di libri presenti nel catalogo: " + str(numlibri))
         self.label.pack()
+        if(numlibri > 0):
+            self.label = tk.Label(
+                text="I libri presenti nel catalogo sono: \n" + str(self.cat))
+            self.label.pack()
 
     def insert(self, evento):
         nuovolibro = evento.widget.get()
