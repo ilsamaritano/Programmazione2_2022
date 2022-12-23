@@ -3,6 +3,7 @@ from tkinter import filedialog as fd
 from tkinter.filedialog import asksaveasfile
 from tkinter import messagebox
 
+
 class Libro:
     def __init__(self, cognome, nome, titolo, anno, collocazione, iban, note=""):
         for el in [cognome, nome, titolo, iban, note]:
@@ -23,7 +24,6 @@ class Libro:
         self.iban = iban
         self.note = note
 
-        
         """ Crea un nuovo oggetto Libro
         :param cognome: cognome dell'autore
         :param nome: nome dell'autore
@@ -179,7 +179,6 @@ class Finestra:
         self.root.title("Biblioteca")
         self.root.geometry("800x800")
 
-        
         self.cat = Catalogo()
 
         #self.label = tk.Label(text=Catalogo.dizionario)
@@ -218,8 +217,6 @@ class Finestra:
         self.btn_esporta.bind("<Button-1>", self.handler_esporta)
         self.btn_exit.bind("<Button-1>", self.handler_exit)
 
-       
-
     # task 2: definizione dei gestori degli eventi
 
     def handler_visualizza(self, root):
@@ -231,25 +228,27 @@ class Finestra:
 
         numlibri = self.cat.n_books()
 
-        self.res["text"] ="\n Numero di libri presenti nel catalogo: " + str(numlibri)
-         
+        self.res["text"] = "\n Numero di libri presenti nel catalogo: " + \
+            str(numlibri)
+
         if(numlibri > 0):
-            self.res["text"] = self.res["text"] + "\n I libri presenti nel catalogo sono: \n" + str(self.cat)        
-            
+            self.res["text"] = self.res["text"] + \
+                "\n I libri presenti nel catalogo sono: \n" + str(self.cat)
 
     def destroy_insert(self):
-        campi_inseriti = ["cognome", "nome", "titolo", "anno", "collocazione-lettera", "collocazione-numero", "iban", "note"]
+        campi_inseriti = ["cognome", "nome", "titolo", "anno",
+                          "collocazione-lettera", "collocazione-numero", "iban", "note"]
         for cam in campi_inseriti:
             self.rows[cam].destroy()
         self.label1.destroy()
         self.btn_submitBook.destroy()
 
     def inseriscilo(self):
-        
-        #controllo i tipi di elementi inseriti
+
+        # controllo i tipi di elementi inseriti
         alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\'àèéòçù "
         numbers = "1234567890"
-        
+
         for el in ["cognome", "nome", "collocazione-lettera"]:
             for char in self.entrate[el].get():
                 if char not in alphabet:
@@ -259,51 +258,51 @@ class Finestra:
                 if char not in numbers:
                     return messagebox.showerror("Errore", "Il campo "+el+" può contenere solo numeri")
 
-
-        #creo il libro e lo inserisco
-        collocazione = (self.entrate["collocazione-lettera"].get().upper(), int(float(self.entrate["collocazione-numero"].get())))
-        newBook = Libro(self.entrate["cognome"].get(), self.entrate["nome"].get(),self.entrate["titolo"].get(), 
-            int(self.entrate["anno"].get()), collocazione, 
-            self.entrate["iban"].get(), self.entrate["note"].get())
+        # creo il libro e lo inserisco
+        collocazione = (self.entrate["collocazione-lettera"].get().upper(),
+                        int(float(self.entrate["collocazione-numero"].get())))
+        newBook = Libro(self.entrate["cognome"].get(), self.entrate["nome"].get(), self.entrate["titolo"].get(),
+                        int(self.entrate["anno"].get()), collocazione,
+                        self.entrate["iban"].get(), self.entrate["note"].get())
 
         try:
             self.cat.inserisci(newBook)
         except(ValueError):
             self.res["text"] = "Errore nell'inserimento"
-        else:            
+        else:
             self.res["text"] = "L'inserimento è avvenuto correttamente"
             self.destroy_insert()
-        #evento.widget.delete(0,tk.END)   #cancella fra un inserimento e l’altro
-
+        # evento.widget.delete(0,tk.END)   #cancella fra un inserimento e l’altro
 
     def handler_inserisci(self, root):
-        self.res["text"] = " "        
+        self.res["text"] = " "
         self.label1 = tk.Label(text="\n Inserisci i dati del nuovo libro:")
         self.label1.pack()
-        campi_inseriti = ["cognome", "nome", "titolo", "anno", "collocazione-lettera", "collocazione-numero", "iban", "note"]
+        campi_inseriti = ["cognome", "nome", "titolo", "anno",
+                          "collocazione-lettera", "collocazione-numero", "iban", "note"]
         self.entrate = {}
         self.rows = {}
-        for campo in campi_inseriti:     
-            val = tk.StringVar()       
+        for campo in campi_inseriti:
+            val = tk.StringVar()
             self.rows[campo] = tk.Frame(master=self.root)
-            label = tk.Label(master=self.rows[campo], width=22, text=campo+": ", anchor='w')
-            self.entrate[campo] = tk.Entry(master=self.rows[campo], textvariable=val, width=30)
-            self.rows[campo].pack(side = tk.TOP, fill = tk.X, pady = 5)
+            label = tk.Label(
+                master=self.rows[campo], width=22, text=campo+": ", anchor='w')
+            self.entrate[campo] = tk.Entry(
+                master=self.rows[campo], textvariable=val, width=30)
+            self.rows[campo].pack(side=tk.TOP, fill=tk.X, pady=5)
             label.pack(side=tk.LEFT)
-            self.entrate[campo].pack(side = tk.RIGHT, expand = tk.YES, fill = tk.X)        
-            
+            self.entrate[campo].pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
+
         self.btn_submitBook = tk.Button(
             bg="white", text="Inserisci il libro", width=20, height=2, command=self.inseriscilo)
-        self.btn_submitBook.pack()  
-        
-  
+        self.btn_submitBook.pack()
+
     def handler_esporta(self, evento):
         # esporta il catalogo in formato txt
         files = [('Documento di testo', '*.txt')]
         file = asksaveasfile(title='Scegli dove esportare il catalogo',
                              filetypes=files, defaultextension=files)
-        
-        
+
         try:
             self.cat.store(file.name)
         except(FileExistsError, FileNotFoundError):
@@ -311,12 +310,13 @@ class Finestra:
         except(AttributeError):
             return messagebox.showerror("Errore", "E' necessario selezionare un file")
         else:
-            risposta = messagebox.askyesno("Domanda", "Desideri svuotare il catalogo dopo l'esportazione?")
+            risposta = messagebox.askyesno(
+                "Domanda", "Desideri svuotare il catalogo dopo l'esportazione?")
             if risposta:
                 self.cat = Catalogo()
-                self.res["text"] = "Il caricamento è evvenuto correttamente ed il catalogo è stato svuotato"
+                self.res["text"] = "Il caricamento è avvenuto correttamente ed il catalogo è stato svuotato"
             else:
-                self.res["text"] = "Il caricamento è evvenuto correttamente, ora potrai continuare a lavorare sul catalogo"
+                self.res["text"] = "Il caricamento è avvenuto correttamente, ora potrai continuare a lavorare sul catalogo"
 
     def handler_carica(self, evento):
         # carica un catalogo da file txt
@@ -330,7 +330,7 @@ class Finestra:
         except(FileNotFoundError):
             return messagebox.showerror("Errore", "Il file non è presente")
         else:
-            self.res["text"] = "Il caricamento è evvenuto correttamente"
+            self.res["text"] = "Il caricamento è avvenuto correttamente"
 
     def handler_exit(self, evento):
         # chiude la finestra
