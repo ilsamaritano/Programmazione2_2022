@@ -248,6 +248,13 @@ class Finestra:
         # controllo i tipi di elementi inseriti
         alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\'àèéòçù "
         numbers = "1234567890"
+        param = ["cognome", "nome", "collocazione-lettera",
+                 "anno", "collocazione-numero", "iban"]
+        for elem in param:
+            if self.entrate[elem].get() != "":
+                continue
+            else:
+                return messagebox.showerror("Errore", "Il campo "+elem.capitalize()+" non può essere vuoto!")
 
         for el in ["cognome", "nome", "collocazione-lettera"]:
             for char in self.entrate[el].get():
@@ -331,7 +338,7 @@ class Finestra:
         except(FileNotFoundError):
             return messagebox.showerror("Errore", "Il file non è presente")
         else:
-            self.res["text"] = "Il caricamento è avvenuto correttamente!"
+            self.res["text"] = "Il caricamento è avvenuto correttamente."
 
     def handler_exit(self, evento):
         # chiude la finestra
