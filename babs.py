@@ -286,12 +286,13 @@ class Finestra:
             val = tk.StringVar()
             self.rows[campo] = tk.Frame(master=self.root)
             label = tk.Label(
-                master=self.rows[campo], width=22, text=campo+": ", anchor='w')
+                master=self.rows[campo], width=22, text=campo.capitalize()+": ", anchor='w', padx=20)
             self.entrate[campo] = tk.Entry(
                 master=self.rows[campo], textvariable=val, width=30)
             self.rows[campo].pack(side=tk.TOP, fill=tk.X, pady=5)
             label.pack(side=tk.LEFT)
-            self.entrate[campo].pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
+            self.entrate[campo].pack(
+                side=tk.RIGHT, expand=tk.YES, fill=tk.X, padx=25)
 
         self.btn_submitBook = tk.Button(
             bg="white", text="Inserisci il libro", width=20, height=2, command=self.inseriscilo)
@@ -306,17 +307,17 @@ class Finestra:
         try:
             self.cat.store(file.name)
         except(FileExistsError, FileNotFoundError):
-            return messagebox.showerror("Errore", "Il file non è presente")
+            return messagebox.showerror("Errore", "Il file non è presente.")
         except(AttributeError):
-            return messagebox.showerror("Errore", "E' necessario selezionare un file")
+            return messagebox.showerror("Errore", "E' necessario selezionare un file.")
         else:
             risposta = messagebox.askyesno(
                 "Domanda", "Desideri svuotare il catalogo dopo l'esportazione?")
             if risposta:
                 self.cat = Catalogo()
-                self.res["text"] = "Il caricamento è avvenuto correttamente ed il catalogo è stato svuotato"
+                self.res["text"] = "Il caricamento è avvenuto correttamente ed il catalogo è stato svuotato."
             else:
-                self.res["text"] = "Il caricamento è avvenuto correttamente, ora potrai continuare a lavorare sul catalogo"
+                self.res["text"] = "Il caricamento è avvenuto correttamente, ora potrai continuare a lavorare sul catalogo."
 
     def handler_carica(self, evento):
         # carica un catalogo da file txt
@@ -330,7 +331,7 @@ class Finestra:
         except(FileNotFoundError):
             return messagebox.showerror("Errore", "Il file non è presente")
         else:
-            self.res["text"] = "Il caricamento è avvenuto correttamente"
+            self.res["text"] = "Il caricamento è avvenuto correttamente!"
 
     def handler_exit(self, evento):
         # chiude la finestra
