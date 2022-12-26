@@ -333,12 +333,15 @@ class Finestra:
             title='Carica un catalogo',
             filetypes=files)
         #print("file", file)
-        try:
-            self.cat.load(file)
-        except(FileNotFoundError):
-            return messagebox.showerror("Errore", "Il file non è presente")
+        if file != "":
+            try:
+                self.cat.load(file)
+            except(FileExistsError, FileNotFoundError):
+                return messagebox.showerror("Errore", "Il file non è presente")
+            else:
+                self.res["text"] = "Il caricamento è avvenuto correttamente."
         else:
-            self.res["text"] = "Il caricamento è avvenuto correttamente."
+            return messagebox.showerror("Errore", "Il file non è presente.")
 
     def handler_exit(self, evento):
         # chiude la finestra
